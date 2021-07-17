@@ -25,7 +25,7 @@ class City
      * @param string $name
      * @param State $state
      */
-    public function __construct($id, $name)
+    public function __construct($id, $name = "")
     {
         $this->id = $id;
         $this->name = $name;
@@ -38,6 +38,11 @@ class City
     {
         $this->state = $state;
         return $this;
+    }
+
+    public function getId()
+    {
+        return $this->id;
     }
 
     public function returnArray()

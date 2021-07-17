@@ -2,6 +2,9 @@
 
 namespace Source\Models;
 
+use \PDO;
+use \Source\Db\Connection;
+
 class Address
 {
 
@@ -55,6 +58,34 @@ class Address
     {
         $this->city = is_null($this->city) ? null : $this->city->returnArray();
         return get_object_vars($this);
+    }
+
+    /**
+     * metodo para listar endereços
+     * @return array
+     */
+    public function getAddressByCity()
+    {
+
+        $conn = Connection::getInstance();
+
+        $sql = "select id, address, zip_code
+                from address
+                where city_id = :city_id";
+
+        $rs = $conn->prepare($sql);
+        $rs->bindValue(':city_id', $this->city->getId(), PDO::PARAM_INT);
+        $rs->execute();
+
+        $arrayAddress = array();
+
+        while ($row = $rs->fetch(PDO::FETCH_OBJ)) {
+            $newAddress = new Address($row->id, $row->address, $row->zip_code);
+            array_push($arrayAddress, $newAddress->returnArray());
+        }
+
+        return $arrayAddress;
+
     }
 
 }
