@@ -55,4 +55,20 @@ class AddressController
         }
     }
 
+    /**
+     * metodo para buscar todos endereços
+     */
+    public static function getAllAddress()
+    {
+        try {
+
+            $returnAddress = Address::getAllAddress();
+
+            return array('success', $returnAddress, '');
+
+        } catch (Exception $e) {
+            return array('error', '', $e->getMessage());
+        }
+    }
+
 }

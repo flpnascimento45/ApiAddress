@@ -109,8 +109,6 @@ class Address
         $rs->bindValue(':id', $this->id, PDO::PARAM_INT);
         $rs->execute();
 
-        $arrayAddress = array();
-
         while ($row = $rs->fetch(PDO::FETCH_OBJ)) {
 
             $this->address = $row->address;
@@ -124,6 +122,40 @@ class Address
         }
 
         throw new Exception('Endereço não localizado!');
+
+    }
+
+    /**
+     * metodo para buscar todos endereços
+     * @return void
+     */
+    public static function getAllAddress()
+    {
+
+        $conn = Connection::getInstance();
+
+        $sql = "select a.id as address_id, a.address, a.zip_code,
+                       c.id as city_id, c.name as city_name,
+                       s.id as state_id, s.name as state_name, s.initials
+                from address a left join city c on (c.id = a.city_id)
+                               left join state s on (s.id = c.state_id)";
+
+        $rs = $conn->prepare($sql);
+        $rs->execute();
+
+        $arrayAddress = array();
+
+        while ($row = $rs->fetch(PDO::FETCH_OBJ)) {
+
+            $newAddress = new Address($row->address_id, $row->address, $row->zip_code);
+            $newAddress->setCity(new City($row->city_id, $row->city_name));
+            $newAddress->getCity()->setState(new State($row->state_id, $row->state_name, $row->initials));
+
+            array_push($arrayAddress, $newAddress->returnArray());
+
+        }
+
+        return $arrayAddress;
 
     }
 

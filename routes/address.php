@@ -7,6 +7,20 @@ use \Source\Http\Response;
 /**
  * busca endereço pela cidade
  */
+$router->get('/address', [
+    function () {
+
+        $returnAddress = AddressController::getAllAddress();
+        $jsonReturn = new JsonResponse($returnAddress[0], $returnAddress[1], $returnAddress[2]);
+
+        return new Response(200, $jsonReturn, 'json');
+
+    },
+]);
+
+/**
+ * busca endereço pela cidade
+ */
 $router->get('/address/city/{cityId}', [
     function ($cityId) {
 
