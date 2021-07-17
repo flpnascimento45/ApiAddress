@@ -12,17 +12,17 @@ class City
     /**
      * @var integer
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      */
-    private $name;
+    protected $name;
 
     /**
      * @var State
      */
-    private $state;
+    protected $state;
 
     /**
      * @param integer $id

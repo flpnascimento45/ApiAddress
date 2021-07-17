@@ -4,6 +4,7 @@ namespace Source\Controllers\Api;
 
 use \Exception;
 use \Source\Models\City;
+use \Source\Models\CityReport;
 use \Source\Models\State;
 
 class CityController
@@ -65,6 +66,40 @@ class CityController
             $returnCity = City::getAllCity();
 
             return array('success', $returnCity, '');
+
+        } catch (Exception $e) {
+            return array('error', '', $e->getMessage());
+        }
+    }
+
+    /**
+     * metodo para retornar quantidade de usuarios por cidade
+     */
+    public function getUsersByCity()
+    {
+        try {
+
+            $cityReport = new CityReport();
+            $returnReport = $cityReport->getUsersByCity();
+
+            return array('success', $returnReport, '');
+
+        } catch (Exception $e) {
+            return array('error', '', $e->getMessage());
+        }
+    }
+
+    /**
+     * metodo para retornar quantidade de usuarios por cidade
+     */
+    public function getUsersByCityId($cityId)
+    {
+        try {
+
+            $cityReport = new CityReport($cityId);
+            $cityReport->getUsersByCity();
+
+            return array('success', $cityReport->returnArray(), '');
 
         } catch (Exception $e) {
             return array('error', '', $e->getMessage());
