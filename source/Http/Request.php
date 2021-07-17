@@ -38,10 +38,17 @@ class Request
     public function __construct()
     {
         $this->httpMethod = $_SERVER['REQUEST_METHOD'] ?? '';
-        $this->uri = $_SERVER['REQUEST_URI'];
         $this->queryParams = $_GET ?? [];
         $this->postVars = $_POST ?? [];
-        $this->postVars = getallheaders();
+        $this->headers = getallheaders();
+
+        $this->setUri();
+    }
+
+    private function setUri()
+    {
+        $xUri = explode('?', $_SERVER['REQUEST_URI']);
+        $this->uri = $xUri[0];
     }
 
     /**

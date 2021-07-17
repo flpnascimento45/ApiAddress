@@ -25,4 +25,59 @@ class UserController
             return array('error', '', $e->getMessage());
         }
     }
+
+    /**
+     * metodo para validar dados de entrada na inserção e alteração
+     * @param array $requestVariables
+     */
+    private static function validationUser($requestVariables, $type)
+    {
+
+        try {
+
+            foreach (array('name', 'login', 'pass', 'address_id') as $field) {
+
+                if (!isset($requestVariables[$field])) {
+                    throw new Exception('Campo ' . $field . ' não localizado');
+                }
+
+                if (!strlen($requestVariables[$field]) > 0) {
+                    throw new Exception('Campo ' . $field . ' não preenchido');
+                }
+
+            }
+
+            if ($type != 'insert') {
+
+                if (!isset($requestVariables['id'])) {
+                    throw new Exception('Campo id não localizado');
+                }
+
+                if (!ctype_digit($requestVariables['id'])) {
+                    throw new Exception('Campo id invalido!');
+                }
+
+            }
+
+            return array('success');
+
+        } catch (Exception $e) {
+            return array('error', '', $e->getMessage());
+        }
+
+    }
+
+    public static function insert($requestVariables)
+    {
+
+        $returnValidation = self::validationUser($requestVariables, 'insert');
+
+        if ($returnValidation[0] === 'error') {
+            return $returnValidation;
+        }
+
+        return array('success', $requestVariables, '');
+
+    }
+
 }

@@ -86,4 +86,40 @@ class User
 
     }
 
+    /**
+     * @param User $user
+     * @return void
+     */
+    public function insert($user)
+    {
+
+        $conn = Connection::getInstance();
+
+        $sqlAddress = "select count(id) as qtd from address where id = :id";
+
+        $rs = $conn->prepare($sqlAddress);
+        $rs->bindValue(':id', $this->address->getId(), PDO::PARAM_INT);
+        $rs->execute();
+
+        if (!$rs->fetchColumn() > 0) {
+            throw new Exception('Endereço não localizado!');
+        }
+
+        $sql = "insert into user (name, login, pass, address_id)
+                values (:name, :login, md5(:pass), :address_id);";
+
+        $rs = $conn->prepare($sql);
+        $rs->bindValue(':name', $this->name, PDO::PARAM_STR);
+        $rs->bindValue(':login', $this->login, PDO::PARAM_STR);
+        $rs->bindValue(':pass', $this->pass, PDO::PARAM_STR);
+        $rs->bindValue(':address_id', $this->address->getId(), PDO::PARAM_INT);
+
+        if ($rs->execute()) {
+            $user->id = $conn->lastInsertId();
+        } else {
+            throw new Exception('Falha ao inserir usuário');
+        }
+
+    }
+
 }

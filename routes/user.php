@@ -14,3 +14,16 @@ $router->get('/user/{userId}', [
 
     },
 ]);
+
+$router->post('/user', [
+    function ($request) {
+
+        $requestVariables = $request->getPostVars();
+
+        $returnUser = UserController::insert($requestVariables);
+        $jsonReturn = new JsonResponse($returnUser[0], $returnUser[1], $returnUser[2]);
+
+        return new Response(200, $jsonReturn, 'json');
+
+    },
+]);
