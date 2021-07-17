@@ -43,8 +43,17 @@ class User
 
     public function returnArray()
     {
-        $this->address = $this->address->returnArray();
+        $this->address = is_null($this->address) ? null : $this->address->returnArray();
         return get_object_vars($this);
+    }
+
+    /**
+     * @param Address $address
+     */
+    public function setAddress($address)
+    {
+        $this->address = $address;
+        return $this;
     }
 
     /**
@@ -87,23 +96,40 @@ class User
     }
 
     /**
+     * valida se endereco existe
+     * @param Address $address
+     */
+    private function validationAddress($address)
+    {
+
+        if ($address->getId() != null) {
+
+            $conn = Connection::getInstance();
+
+            $sqlAddress = "select count(id) as qtd from address where id = :id";
+
+            $rs = $conn->prepare($sqlAddress);
+            $rs->bindValue(':id', $this->address->getId(), PDO::PARAM_INT);
+            $rs->execute();
+
+            if (!$rs->fetchColumn() > 0) {
+                throw new Exception('Endereço não localizado!');
+            }
+
+        }
+
+    }
+
+    /**
      * @param User $user
      * @return void
      */
-    public function insert($user)
+    public function insert()
     {
 
+        $this->validationAddress($this->address);
+
         $conn = Connection::getInstance();
-
-        $sqlAddress = "select count(id) as qtd from address where id = :id";
-
-        $rs = $conn->prepare($sqlAddress);
-        $rs->bindValue(':id', $this->address->getId(), PDO::PARAM_INT);
-        $rs->execute();
-
-        if (!$rs->fetchColumn() > 0) {
-            throw new Exception('Endereço não localizado!');
-        }
 
         $sql = "insert into user (name, login, pass, address_id)
                 values (:name, :login, md5(:pass), :address_id);";
@@ -115,7 +141,7 @@ class User
         $rs->bindValue(':address_id', $this->address->getId(), PDO::PARAM_INT);
 
         if ($rs->execute()) {
-            $user->id = $conn->lastInsertId();
+            $this->id = $conn->lastInsertId();
         } else {
             throw new Exception('Falha ao inserir usuário');
         }

@@ -25,11 +25,10 @@ class City
      * @param string $name
      * @param State $state
      */
-    public function __construct($id, $name, $state = null)
+    public function __construct($id, $name)
     {
         $this->id = $id;
         $this->name = $name;
-        $this->state = $state;
     }
 
     /**
@@ -43,7 +42,7 @@ class City
 
     public function returnArray()
     {
-        $this->state = $this->state->returnArray();
+        $this->state = is_null($this->state) ? null : $this->state->returnArray();
         return get_object_vars($this);
     }
 

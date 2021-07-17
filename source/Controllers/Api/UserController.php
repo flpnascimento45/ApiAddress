@@ -3,6 +3,7 @@
 namespace Source\Controllers\Api;
 
 use \Exception;
+use \Source\Models\Address;
 use \Source\Models\User;
 
 class UserController
@@ -70,13 +71,23 @@ class UserController
     public static function insert($requestVariables)
     {
 
-        $returnValidation = self::validationUser($requestVariables, 'insert');
+        try {
 
-        if ($returnValidation[0] === 'error') {
-            return $returnValidation;
+            $returnValidation = self::validationUser($requestVariables, 'insert');
+
+            if ($returnValidation[0] === 'error') {
+                return $returnValidation;
+            }
+
+            $user = new User(0, $requestVariables['name'], $requestVariables['login'], $requestVariables['pass']);
+            $user->setAddress(new Address($requestVariables['address_id']));
+            $user->insert();
+
+            return array('success', $user->returnArray(), '');
+
+        } catch (Exception $e) {
+            return array('error', '', $e->getMessage());
         }
-
-        return array('success', $requestVariables, '');
 
     }
 

@@ -25,12 +25,11 @@ class Address
      */
     private $city;
 
-    public function __construct($id, $address, $zipCode, $city = null)
+    public function __construct($id, $address = "", $zipCode = "")
     {
-        $this->id = $id;
+        $this->id = $id == 0 ? null : $id;
         $this->address = $address;
         $this->zipCode = $zipCode;
-        $this->city = $city;
     }
 
     public function getId()
@@ -54,7 +53,7 @@ class Address
 
     public function returnArray()
     {
-        $this->city = $this->city->returnArray();
+        $this->city = is_null($this->city) ? null : $this->city->returnArray();
         return get_object_vars($this);
     }
 
