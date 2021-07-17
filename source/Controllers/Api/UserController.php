@@ -126,4 +126,26 @@ class UserController
 
     }
 
+    /**
+     * metodo para deletar usuario por id
+     * @param integer $userId
+     */
+    public static function deleteById($userId)
+    {
+        try {
+
+            if (!ctype_digit($userId)) {
+                throw new Exception('Falha ao recuperar id do usuario!');
+            }
+
+            $user = new User($userId);
+            $user->deleteById();
+
+            return array('success', 'Excluido com êxito', '');
+
+        } catch (Exception $e) {
+            return array('error', '', $e->getMessage());
+        }
+    }
+
 }

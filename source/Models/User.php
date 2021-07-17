@@ -183,4 +183,29 @@ class User
 
     }
 
+    /**
+     * @param User $user
+     * @return void
+     */
+    public function deleteById()
+    {
+
+        $conn = Connection::getInstance();
+
+        $sql = "delete from user
+                where id = :id;";
+
+        $rs = $conn->prepare($sql);
+        $rs->bindValue(':id', $this->id, PDO::PARAM_INT);
+
+        if (!$rs->execute()) {
+            throw new Exception('Falha ao deletar usuário');
+        }
+
+        if (!$rs->rowCount()) {
+            throw new Exception('Usuário não localizado');
+        }
+
+    }
+
 }

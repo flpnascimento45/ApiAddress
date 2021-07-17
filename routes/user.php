@@ -49,3 +49,17 @@ $router->put('/user', [
 
     },
 ]);
+
+/**
+ * deletar usuario por id
+ */
+$router->delete('/user/{userId}', [
+    function ($userId) {
+
+        $returnUser = UserController::deleteById($userId);
+        $jsonReturn = new JsonResponse($returnUser[0], $returnUser[1], $returnUser[2]);
+
+        return new Response(200, $jsonReturn, 'json');
+
+    },
+]);
