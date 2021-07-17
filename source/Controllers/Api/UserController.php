@@ -9,6 +9,10 @@ use \Source\Models\User;
 class UserController
 {
 
+    /**
+     * metodo para buscar usuario por id
+     * @param integer $userId
+     */
     public static function getUserById($userId)
     {
         try {
@@ -68,6 +72,10 @@ class UserController
 
     }
 
+    /**
+     * metodo para inserir usuario
+     * @param array $requestVariables
+     */
     public static function insert($requestVariables)
     {
 
@@ -82,6 +90,33 @@ class UserController
             $user = new User(0, $requestVariables['name'], $requestVariables['login'], $requestVariables['pass']);
             $user->setAddress(new Address($requestVariables['address_id']));
             $user->insert();
+
+            return array('success', $user->returnArray(), '');
+
+        } catch (Exception $e) {
+            return array('error', '', $e->getMessage());
+        }
+
+    }
+
+    /**
+     * metodo para inserir usuario
+     * @param array $requestVariables
+     */
+    public static function update($requestVariables)
+    {
+
+        try {
+
+            $returnValidation = self::validationUser($requestVariables, 'update');
+
+            if ($returnValidation[0] === 'error') {
+                return $returnValidation;
+            }
+
+            $user = new User($requestVariables['id'], $requestVariables['name'], $requestVariables['login'], $requestVariables['pass']);
+            $user->setAddress(new Address($requestVariables['address_id']));
+            $user->update();
 
             return array('success', $user->returnArray(), '');
 

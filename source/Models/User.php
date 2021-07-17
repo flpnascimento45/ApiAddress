@@ -148,4 +148,39 @@ class User
 
     }
 
+    /**
+     * @param User $user
+     * @return void
+     */
+    public function update()
+    {
+
+        $this->validationAddress($this->address);
+
+        $conn = Connection::getInstance();
+
+        $sql = "update user
+                set name       = :name,
+                    login      = :login,
+                    pass       = md5(:pass),
+                    address_id = :address_id
+                where id = :id;";
+
+        $rs = $conn->prepare($sql);
+        $rs->bindValue(':name', $this->name, PDO::PARAM_STR);
+        $rs->bindValue(':login', $this->login, PDO::PARAM_STR);
+        $rs->bindValue(':pass', $this->pass, PDO::PARAM_STR);
+        $rs->bindValue(':address_id', $this->address->getId(), PDO::PARAM_INT);
+        $rs->bindValue(':id', $this->id, PDO::PARAM_INT);
+
+        if (!$rs->execute()) {
+            throw new Exception('Falha ao atualizar usuário');
+        }
+
+        if (!$rs->rowCount()) {
+            throw new Exception('Nenhuma alteração aplicada ao usuário');
+        }
+
+    }
+
 }
