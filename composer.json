@@ -1,0 +1,27 @@
+{
+    "name": "flpnascimento45/api_address",
+    "description": "API Address",
+    "minimum-stability": "stable",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Felipe N. Alves",
+            "email": "flpnascimenot45@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "config": {
+        "vendor-dir": "vendor"
+    },
+    "autoload": {
+        "psr-4": {
+            "Source\\": "source/"
+        },
+        "files": [
+            "source/Config.php"
+        ]
+    },
+    "require": {
+        "php": "^7.3"
+    }
+}
