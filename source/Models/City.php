@@ -56,7 +56,7 @@ class City
     }
 
     /**
-     * metodo para listar cidade pela cidade
+     * metodo para listar cidade pelo estado
      * @return array
      */
     public function getCityByState()
@@ -117,7 +117,7 @@ class City
     }
 
     /**
-     * metodo para listar cidade pela cidade
+     * metodo para listar todas cidades
      * @return array
      */
     public static function getAllCity()

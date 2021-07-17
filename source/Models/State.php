@@ -2,23 +2,27 @@
 
 namespace Source\Models;
 
+use \Exception;
+use \PDO;
+use \Source\Db\Connection;
+
 class State
 {
 
     /**
      * @var integer
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string
      */
-    private $initials;
+    protected $initials;
 
     public function __construct($id, $name = "", $initials = "")
     {
@@ -35,6 +39,66 @@ class State
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * metodo para buscar estado pelo id
+     * @return void
+     */
+    public function getStateById()
+    {
+
+        $conn = Connection::getInstance();
+
+        $sql = "select name, initials
+                from state
+                where id = :id";
+
+        $rs = $conn->prepare($sql);
+        $rs->bindValue(':id', $this->id, PDO::PARAM_INT);
+        $rs->execute();
+
+        $arrayAddress = array();
+
+        while ($row = $rs->fetch(PDO::FETCH_OBJ)) {
+
+            $this->name = $row->name;
+            $this->initials = $row->initials;
+
+            return;
+
+        }
+
+        throw new Exception('Estado não localizado!');
+
+    }
+
+    /**
+     * metodo para listar todos estados
+     * @return array
+     */
+    public static function getAllState()
+    {
+
+        $conn = Connection::getInstance();
+
+        $sql = "select id, name, initials
+                from state";
+
+        $rs = $conn->prepare($sql);
+        $rs->execute();
+
+        $arrayState = array();
+
+        while ($row = $rs->fetch(PDO::FETCH_OBJ)) {
+
+            $newState = new State($row->id, $row->name, $row->initials);
+            array_push($arrayState, $newState->returnArray());
+
+        }
+
+        return $arrayState;
+
     }
 
 }

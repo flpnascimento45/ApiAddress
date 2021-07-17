@@ -56,8 +56,7 @@ class CityController
     }
 
     /**
-     * metodo para buscar cidade pelo id
-     * @param integer $cityId
+     * metodo para buscar todas cidades
      */
     public static function getAllCity()
     {

@@ -12,3 +12,4 @@ $router->get('/', [
 include __DIR__ . '/user.php';
 include __DIR__ . '/address.php';
 include __DIR__ . '/city.php';
+include __DIR__ . '/state.php';

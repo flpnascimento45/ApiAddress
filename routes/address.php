@@ -5,7 +5,7 @@ use \Source\Http\JsonResponse;
 use \Source\Http\Response;
 
 /**
- * busca endereço pela cidade
+ * busca todos endereços
  */
 $router->get('/address', [
     function () {

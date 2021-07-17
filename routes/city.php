@@ -33,7 +33,7 @@ $router->get('/city/state/{stateId}', [
 ]);
 
 /**
- * busca endereço pelo id
+ * busca cidade pelo id
  */
 $router->get('/city/id/{cityId}', [
     function ($cityId) {
