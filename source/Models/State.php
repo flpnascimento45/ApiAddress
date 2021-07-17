@@ -20,7 +20,7 @@ class State
      */
     private $initials;
 
-    public function __construct($id, $name, $initials)
+    public function __construct($id, $name = "", $initials = "")
     {
         $this->id = $id;
         $this->name = $name;
@@ -30,6 +30,11 @@ class State
     public function returnArray()
     {
         return get_object_vars($this);
+    }
+
+    public function getId()
+    {
+        return $this->id;
     }
 
 }
