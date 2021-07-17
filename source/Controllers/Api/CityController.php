@@ -55,4 +55,21 @@ class CityController
         }
     }
 
+    /**
+     * metodo para buscar cidade pelo id
+     * @param integer $cityId
+     */
+    public static function getAllCity()
+    {
+        try {
+
+            $returnCity = City::getAllCity();
+
+            return array('success', $returnCity, '');
+
+        } catch (Exception $e) {
+            return array('error', '', $e->getMessage());
+        }
+    }
+
 }

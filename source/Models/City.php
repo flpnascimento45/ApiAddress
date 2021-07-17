@@ -116,4 +116,35 @@ class City
 
     }
 
+    /**
+     * metodo para listar cidade pela cidade
+     * @return array
+     */
+    public static function getAllCity()
+    {
+
+        $conn = Connection::getInstance();
+
+        $sql = "select c.id as city_id, c.name as city_name,
+                       s.id as state_id, s.name as state_name, s.initials
+                from city c inner join state s on (s.id = c.state_id)";
+
+        $rs = $conn->prepare($sql);
+        $rs->execute();
+
+        $arrayCity = array();
+
+        while ($row = $rs->fetch(PDO::FETCH_OBJ)) {
+
+            $newCity = new City($row->city_id, $row->city_name);
+            $newCity->setState(new State($row->state_id, $row->state_name, $row->initials));
+
+            array_push($arrayCity, $newCity->returnArray());
+
+        }
+
+        return $arrayCity;
+
+    }
+
 }
