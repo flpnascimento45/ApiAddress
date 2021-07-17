@@ -5,6 +5,11 @@
 ## 💻 Projeto
 API com CRUD de usuários e opções variadas de consulta de endereços, cidades e estados.
 
+Para consultar a documentação das chamadas, acesse o link:
+<a href="https://documenter.getpostman.com/view/6218260/TzmCgsaf">
+https://documenter.getpostman.com/view/6218260/TzmCgsaf
+</a>
+
 ## :hammer_and_wrench: Features 
 
 -   [ ] Consultar, cadastrar, alterar e excluir usuários.
