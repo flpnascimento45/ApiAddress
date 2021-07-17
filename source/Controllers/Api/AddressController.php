@@ -10,8 +10,8 @@ class AddressController
 {
 
     /**
-     * metodo para buscar usuario por id
-     * @param integer $userId
+     * metodo para buscar endereço pela cidade
+     * @param integer $cityId
      */
     public static function getAddressByCity($cityId)
     {
@@ -27,6 +27,28 @@ class AddressController
             $addressReturn = $address->getAddressByCity();
 
             return array('success', $addressReturn, '');
+
+        } catch (Exception $e) {
+            return array('error', '', $e->getMessage());
+        }
+    }
+
+    /**
+     * metodo para buscar endereço pelo id
+     * @param integer $addressId
+     */
+    public static function getAddressById($addressId)
+    {
+        try {
+
+            if (!ctype_digit($addressId)) {
+                throw new Exception('Falha ao recuperar id do endereço!');
+            }
+
+            $address = new Address($addressId);
+            $address->getAddressById();
+
+            return array('success', $address->returnArray(), '');
 
         } catch (Exception $e) {
             return array('error', '', $e->getMessage());

@@ -2,6 +2,7 @@
 
 namespace Source\Models;
 
+use \Exception;
 use \PDO;
 use \Source\Db\Connection;
 
@@ -61,7 +62,7 @@ class Address
     }
 
     /**
-     * metodo para listar endereços
+     * metodo para listar endereços pela cidade
      * @return array
      */
     public function getAddressByCity()
@@ -85,6 +86,44 @@ class Address
         }
 
         return $arrayAddress;
+
+    }
+
+    /**
+     * metodo para buscar endereço pelo id
+     * @return void
+     */
+    public function getAddressById()
+    {
+
+        $conn = Connection::getInstance();
+
+        $sql = "select a.address, a.zip_code,
+                       c.id as city_id, c.name as city_name,
+                       s.id as state_id, s.name as state_name, s.initials
+                from address a left join city c on (c.id = a.city_id)
+                               left join state s on (s.id = c.state_id)
+                where a.id = :id";
+
+        $rs = $conn->prepare($sql);
+        $rs->bindValue(':id', $this->id, PDO::PARAM_INT);
+        $rs->execute();
+
+        $arrayAddress = array();
+
+        while ($row = $rs->fetch(PDO::FETCH_OBJ)) {
+
+            $this->address = $row->address;
+            $this->zip_code = $row->zip_code;
+
+            $this->setCity(new City($row->city_id, $row->city_name));
+            $this->getCity()->setState(new State($row->state_id, $row->state_name, $row->initials));
+
+            return;
+
+        }
+
+        throw new Exception('Endereço não localizado!');
 
     }
 
