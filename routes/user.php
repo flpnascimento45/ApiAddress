@@ -37,12 +37,12 @@ $router->post('/user', [
 /**
  * alteração de usuario
  */
-$router->put('/user', [
-    function ($request) {
+$router->put('/user/{userId}', [
+    function ($request, $userId) {
 
         $requestVariables = $request->getPostVars();
 
-        $returnUser = UserController::update($requestVariables);
+        $returnUser = UserController::update($requestVariables, $userId);
         $jsonReturn = new JsonResponse($returnUser[0], $returnUser[1], $returnUser[2]);
 
         return new Response(200, $jsonReturn, 'json');

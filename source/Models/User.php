@@ -129,7 +129,6 @@ class User
     }
 
     /**
-     * @param User $user
      * @return void
      */
     public function insert()
@@ -157,6 +156,23 @@ class User
     }
 
     /**
+     * @return boolean
+     */
+    private function checkExists()
+    {
+
+        $conn = Connection::getInstance();
+
+        $sql = "select id from user where id = :id";
+        $rs = $conn->prepare($sql);
+        $rs->bindValue(':id', $this->id, PDO::PARAM_INT);
+        $rs->execute();
+
+        return $rs->fetchColumn() > 0;
+
+    }
+
+    /**
      * @param User $user
      * @return void
      */
@@ -164,6 +180,10 @@ class User
     {
 
         $this->validationAddress($this->address);
+
+        if (!$this->checkExists()) {
+            throw new Exception('Usuário não existe');
+        }
 
         $conn = Connection::getInstance();
 
@@ -183,10 +203,6 @@ class User
 
         if (!$rs->execute()) {
             throw new Exception('Falha ao atualizar usuário');
-        }
-
-        if (!$rs->rowCount()) {
-            throw new Exception('Nenhuma alteração aplicada ao usuário');
         }
 
     }

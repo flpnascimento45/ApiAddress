@@ -35,39 +35,19 @@ class UserController
      * metodo para validar dados de entrada na inserção e alteração
      * @param array $requestVariables
      */
-    private static function validationUser($requestVariables, $type)
+    private static function validationUser($requestVariables)
     {
 
-        try {
+        foreach (array('name', 'login', 'pass', 'address_id') as $field) {
 
-            foreach (array('name', 'login', 'pass', 'address_id') as $field) {
-
-                if (!isset($requestVariables[$field])) {
-                    throw new Exception('Campo ' . $field . ' não localizado');
-                }
-
-                if (!strlen($requestVariables[$field]) > 0) {
-                    throw new Exception('Campo ' . $field . ' não preenchido');
-                }
-
+            if (!isset($requestVariables[$field])) {
+                throw new Exception('Campo ' . $field . ' não localizado');
             }
 
-            if ($type != 'insert') {
-
-                if (!isset($requestVariables['id'])) {
-                    throw new Exception('Campo id não localizado');
-                }
-
-                if (!ctype_digit($requestVariables['id'])) {
-                    throw new Exception('Campo id invalido!');
-                }
-
+            if (!strlen($requestVariables[$field]) > 0) {
+                throw new Exception('Campo ' . $field . ' não preenchido');
             }
 
-            return array('success');
-
-        } catch (Exception $e) {
-            return array('error', '', $e->getMessage());
         }
 
     }
@@ -81,11 +61,7 @@ class UserController
 
         try {
 
-            $returnValidation = self::validationUser($requestVariables, 'insert');
-
-            if ($returnValidation[0] === 'error') {
-                return $returnValidation;
-            }
+            self::validationUser($requestVariables);
 
             $user = new User(0, $requestVariables['name'], $requestVariables['login'], $requestVariables['pass']);
             $user->setAddress(new Address($requestVariables['address_id']));
@@ -104,18 +80,22 @@ class UserController
      * metodo para inserir usuario
      * @param array $requestVariables
      */
-    public static function update($requestVariables)
+    public static function update($requestVariables, $userId)
     {
 
         try {
 
-            $returnValidation = self::validationUser($requestVariables, 'update');
+            self::validationUser($requestVariables);
 
-            if ($returnValidation[0] === 'error') {
-                return $returnValidation;
+            if (!isset($userId)) {
+                throw new Exception('Campo id não localizado');
             }
 
-            $user = new User($requestVariables['id'], $requestVariables['name'], $requestVariables['login'], $requestVariables['pass']);
+            if (!ctype_digit($userId)) {
+                throw new Exception('Campo id invalido!');
+            }
+
+            $user = new User($userId, $requestVariables['name'], $requestVariables['login'], $requestVariables['pass']);
             $user->setAddress(new Address($requestVariables['address_id']));
             $user->update();
             $user->setPass('');
