@@ -21,7 +21,6 @@ https://documenter.getpostman.com/view/6218260/TzmCgsaf
 ## ✨ Tecnologias
 
 -   [ ] PHP
--   [ ] MVC
 -   [ ] POO
 -   [ ] Controle de Rotas
 -   [ ] Mysql - Banco de dados
