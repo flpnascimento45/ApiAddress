@@ -90,6 +90,7 @@ class UserController
             $user = new User(0, $requestVariables['name'], $requestVariables['login'], $requestVariables['pass']);
             $user->setAddress(new Address($requestVariables['address_id']));
             $user->insert();
+            $user->setPass('');
 
             return array('success', $user->returnArray(), '');
 
@@ -117,6 +118,7 @@ class UserController
             $user = new User($requestVariables['id'], $requestVariables['name'], $requestVariables['login'], $requestVariables['pass']);
             $user->setAddress(new Address($requestVariables['address_id']));
             $user->update();
+            $user->setPass('');
 
             return array('success', $user->returnArray(), '');
 

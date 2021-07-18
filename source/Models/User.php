@@ -57,6 +57,14 @@ class User
     }
 
     /**
+     * @param string $pass
+     */
+    public function setPass($pass)
+    {
+        $this->pass = '';
+    }
+
+    /**
      * retona usuario pelo id
      * @return void
      */
